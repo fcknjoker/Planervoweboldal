@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PLANERVO – Minőség minden rétegben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Playfair+Display:wght@500;600&family=Montserrat:wght@500;600&family=Lora:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--hf:'Cormorant Garamond';--bg:#161513;--fg:#f1ebe0;--gold:#c99d58;--on:#161513;--card:color-mix(in srgb,var(--bg),var(--fg) 7%);--line:color-mix(in srgb,var(--bg),var(--fg) 20%);--mut:color-mix(in srgb,var(--fg),var(--bg) 40%);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:64px}
+body{margin:0;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);background:var(--bg);color:var(--fg);font:400 16px/1.6 Jost,system-ui,sans-serif}
+h1,h2,h3{font-family:var(--hf),Georgia,serif;font-weight:600;line-height:1.1;margin:0}
+h1{font-size:clamp(40px,8vw,80px);color:var(--gold)}h2{font-size:clamp(30px,5vw,44px);margin-bottom:12px}h3{font-size:26px;margin-top:8px}
+a{color:inherit}.wrap{max-width:1040px;margin:0 auto;padding:0 20px}section{padding:60px 0}.card-bg{background:var(--card)}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:500;letter-spacing:.22em;text-decoration:none}.logo img{height:34px}
+.hero{padding:84px 0 60px;background-size:cover;background-position:center}.hero p{max-width:520px;color:var(--mut);font-size:19px;margin:18px 0 28px}
+.btn{display:inline-block;background:var(--gold);color:var(--on);border:0;padding:12px 22px;font:500 16px Jost,sans-serif;text-decoration:none;cursor:pointer;border-radius:10px}
+.btn.o{background:none;color:var(--fg);border:1px solid var(--gold)}
+.g3{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);padding:26px;border-radius:14px}.card p{color:var(--mut);margin:10px 0 0}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0 18px}
+table{width:100%;border-collapse:collapse;min-width:680px;font-size:15px}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line)}th{background:var(--card);font-weight:500}.n{text-align:right;white-space:nowrap}
+input,select,textarea{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;font:inherit;padding:8px}
+td input[type=number]{width:84px;padding:5px;text-align:right}td input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold)}
+td input.nm{width:100%;min-width:200px;padding:5px}input.ct{font:600 24px 'Cormorant Garamond',serif;width:100%;max-width:420px}
+.tool{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:16px 0}.tool input{width:90px}
+.tot{position:sticky;bottom:0;background:var(--card);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;justify-content:space-between}
+.tot b{font:600 30px 'Cormorant Garamond',serif;color:var(--gold)}.mut{color:var(--mut);font-size:14px}
+.gal{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.sl{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;--p:50%;background:#3b3730;touch-action:pan-y}.sl .im{position:absolute;inset:0;background-size:cover;background-position:center}.sl .b{clip-path:inset(0 calc(100% - var(--p)) 0 0);background-color:#6b6256}.sl i{position:absolute;top:0;bottom:0;left:var(--p);width:3px;margin-left:-1px;background:var(--gold);pointer-events:none}.sl i:after{content:"↔";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:var(--gold);color:var(--on);display:grid;place-items:center}.sl em{position:absolute;bottom:10px;font:500 12px Jost;background:#000a;color:#fff;padding:2px 8px;border-radius:6px;font-style:normal}.sl .rg{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}.st{counter-increment:s}.st:before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--gold);color:var(--on);font:600 20px Jost;margin-bottom:8px}.stw{counter-reset:s}.ct a.btn{margin:0 8px 8px 0}
+.cell{display:flex;align-items:flex-end;padding:10px;min-height:180px;font-size:13px;background:#3b3730;color:#fff;cursor:default}.cell:nth-of-type(2){background-color:#b98d46}
+.x{background:#0009;color:#fff;border:0;border-radius:8px;cursor:pointer;padding:3px 8px}.ba .x{position:absolute;top:8px;right:8px}
+form{display:grid;gap:10px}form input,form textarea{width:100%}
+.two{display:grid;gap:36px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.pl{white-space:pre-line}
+footer{padding:26px 0;border-top:1px solid var(--line);color:var(--mut);font-size:14px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap"><a class="logo" href="#top"><span id="lg"></span>PLANERVO</a></div></header>
+<main id="top"></main>
+<footer><div class="wrap">© 2026 PLANERVO · Minőség minden rétegben · <a href="admin.html">Admin</a></div></footer>
+<script>// 1) Supabase: Project Settings > API: ide másold a Project URL-t és az "anon public" kulcsot.
+//    (A kulcs nyilvános, az írást a setup.sql-ben beállított jogosultság védi.)
+window.SB={url:'https://keuuvnyoeqjxvlyswrsn.supabase.co',key:'sb_publishable_rXrA8xCCJIzAigwpoIt1Ew_LqkeYPIJ'};
+// 2) Közös segédfüggvények (nem kell módosítani)
+window.esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+window.norm=o=>{const t=o.t||{};return{t,c:{a:'#c99d58',b:'#161513',f:'Cormorant Garamond',...o.c},i:{logo:'',hero:'',...o.i},m:o.m||'',g:o.g||[],D:o.D||[],
+sv:o.sv||[0,1,2].map(i=>[t['a'+i]||'',t['b'+i]||'']).filter(x=>x[0]),
+p:o.p||[['Felmérés','Megnézzük a felületet, egyeztetjük az igényeket, és pontos árajánlatot adunk.'],['Előkészítés','Takarás, kaparás, glettelés és alapozás: a szép végeredmény alapja.'],['Kivitelezés','Kézi vagy gépi festés, nemesvakolat szórás tiszta, gyors munkával.'],['Átadás','Takarítás, közös átnézés, garancia. Addig nem vagyunk kész, amíg nem elégedett.']],
+k:{tel:'',wa:'',ms:'',...o.k},
+s:(o.s||['hero','srv','calc','gal','contact'].map(k=>({k,v:1}))).flatMap((x,i,a)=>x.k=='srv'&&!a.some(y=>y.k=='proc')?[x,{k:'proc',v:1}]:[x])}};
+</script>
+<script>
+const $=id=>document.getElementById(id),U=['db','m','m²'],f=n=>Math.round(n).toLocaleString('hu-HU')+' Ft';
+const LOGO='<svg width="30" height="26" viewBox="0 0 30 26" aria-hidden="true"><path d="M2 8 14 2v5L2 12z" fill="#c49a52"/><path d="M2 13 14 9v4L2 17z" fill="#f0cfa0"/><path d="M2 18l12-3v7H2z" fill="currentColor"/><path d="M15 2l12 7v13h-2V10l-10-6z" fill="#c49a52"/></svg>';
+let C,t,lines=[];
+const vis=k=>C.s.some(s=>s.k==k&&s.v);
+const lum=h=>{const n=parseInt(h.slice(1),16);return(.299*(n>>16)+.587*(n>>8&255)+.114*(n&255))/255};
+const hero=()=>`<div class="wrap hero" style="max-width:none${C.i.hero?`;background-image:linear-gradient(#000a,#000a),url('${esc(C.i.hero)}')`:''}"><div class="wrap"><h1>${esc(t.h)}</h1><p>${esc(t.p)}</p>${vis('calc')?'<a class="btn" href="#kalkulator">Árajánlatot számolok</a> ':''}${vis('contact')?'<a class="btn o" href="#kapcsolat">Kapcsolat</a>':''}</div></div>`;
+const row=(c,r,[n,u,l,m])=>{const p=v=>l+m==0?'ajánlat':v?f(v)+'/'+U[u]:'—';return`<tr><td><input type="checkbox" class="ck" data-c="${c}" data-r="${r}" aria-label="Kiválaszt"></td><td>${esc(n)}</td><td><input type="number" min="0" class="qt" value="${u==2?30:u==1?10:1}" style="width:64px"> ${U[u]}</td><td class="n">${p(l)}</td><td class="n">${p(m)}</td></tr>`};
+const B={
+srv:()=>`<h2>${esc(t.sh)}</h2><div class="g3">${C.sv.map(c=>`<div class="card"><h3>${esc(c[0])}</h3><p>${esc(c[1])}</p></div>`).join('')}</div>`,
+calc:()=>`<h2>${esc(t.ph)}</h2><p class="mut">${esc(t.pp)}</p><div class="tool"><label>Felület (m²) <input id="area" type="number" min="1" value="30"></label></div>`+C.D.map((c,ci)=>`<h3>${esc(c[0])}</h3><div class="tw"><table><thead><tr><th></th><th>Tétel</th><th>Menny.</th><th class="n">Munkadíj</th><th class="n">Anyagdíj</th></tr></thead><tbody>${c[1].map((it,ri)=>row(ci,ri,it)).join('')}</tbody></table></div>`).join('')+`<div class="tot"><div><span class="mut">Munkadíj: </span><span id="tl">0 Ft</span> <span class="mut">· Anyagdíj: </span><span id="tm">0 Ft</span><br><span class="mut" id="tn"></span></div><div><span class="mut">Becsült összesen</span><br><b id="tt">0 Ft</b></div><button class="btn" id="quote" type="button">Ajánlatot kérek e-mailben</button></div>`,
+gal:()=>`<h2>${esc(t.gh)}</h2><div class="gal">${C.g.filter(p=>p[0]||p[1]).map(p=>`<div class="sl"><div class="im" style="${p[1]?`background-image:url('${esc(p[1])}')`:''}"></div><div class="im b" style="${p[0]?`background-image:url('${esc(p[0])}')`:''}"></div><i></i><em style="left:10px">Előtte</em><em style="right:10px">Utána</em><input class="rg" type="range" min="0" max="100" value="50" aria-label="Előtte-utána csúszka"></div>`).join('')}</div>`,
+proc:()=>`<h2>${esc(t.wh||'Így dolgozunk')}</h2><div class="g3 stw">${C.p.map(c=>`<div class="card st"><h3>${esc(c[0])}</h3><p>${esc(c[1])}</p></div>`).join('')}</div>`,
+contact:()=>`<div class="two"><div><h2>${esc(t.kh)}</h2><p class="pl">${esc(t.kp)}</p><div class="ct">${(k=>[k.tel&&`<a class="btn" href="tel:${esc(k.tel)}">Hívás</a>`,k.wa&&`<a class="btn o" href="https://wa.me/${esc(k.wa.replace(/\D/g,''))}" target="_blank" rel="noopener">WhatsApp</a>`,k.ms&&`<a class="btn o" href="${esc(k.ms)}" target="_blank" rel="noopener">Messenger</a>`,C.m&&`<a class="btn o" href="mailto:${esc(C.m.split(',')[0])}">E-mail</a>`].filter(Boolean).join(''))(C.k)}</div><form id="cf"><input id="cn" placeholder="Név" required><input id="cp" placeholder="Telefonszám"><textarea id="cm" rows="4" placeholder="Milyen munkát szeretne?"></textarea><button class="btn">Üzenet küldése</button></form></div><div><h2>${esc(t.nh)}</h2><p>${esc(t.np)}</p><form id="nf"><input type="email" id="ne" placeholder="E-mail-cím" required><button class="btn o">Feliratkozom</button></form></div></div>`,
+txt:s=>`<h2>${esc(s.h)}</h2>${s.img?`<img src="${esc(s.img)}" alt="" style="max-width:100%;border-radius:14px;margin:12px 0">`:''}<p class="pl">${esc(s.p)}</p>`};
+function calc(){let l=0,m=0,o=0;lines=[];document.querySelectorAll('.ck:checked').forEach(k=>{const it=C.D[k.dataset.c][1][k.dataset.r],q=+k.closest('tr').querySelector('.qt').value||0;if(it[2]+it[3]==0)o++;l+=q*it[2];m+=q*it[3];lines.push(`${it[0]}: ${q} ${U[it[1]]}`)});
+$('tl').textContent=f(l);$('tm').textContent=f(m);$('tt').textContent=f(l+m);$('tn').textContent=o?'Az „ajánlat szerint” tételek ára felmérés után derül ki.':''}
+function render(){t=C.t;const r=document.documentElement.style,c=C.c,d=lum(c.b)<.5;
+r.setProperty('--gold',c.a);r.setProperty('--bg',c.b);r.setProperty('--fg',d?'#f1ebe0':'#1a1a1a');r.setProperty('--on',d?c.b:'#fff');r.setProperty('--hf',`'${c.f}'`);r.colorScheme=d?'dark':'light';
+$('lg').innerHTML=C.i.logo?`<img src="${esc(C.i.logo)}" alt="PLANERVO">`:LOGO;let n=0;
+$('top').innerHTML=C.s.filter(s=>s.v).map(s=>{if(s.k=='hero')return hero();if(s.k=='gal'&&!C.g.some(p=>p[0]||p[1]))return'';
+const id=s.k=='calc'?' id="kalkulator"':s.k=='contact'?' id="kapcsolat"':'';return`<section${id}${n++%2?' class="card-bg"':''}><div class="wrap">${B[s.k](s)}</div></section>`}).join('');
+if($('tt'))calc();if(location.hash)location.href=location.hash}
+async function load(){try{const r=await fetch(SB.url+'/rest/v1/site_config?id=eq.1&select=data',{headers:{apikey:SB.key}}),j=await r.json();if(j[0]&&j[0].data&&j[0].data.t)return j[0].data}catch(e){}
+try{const r=await fetch('config.json');if(r.ok)return await r.json()}catch(e){}return{}}
+const lead=(o)=>fetch(SB.url+'/rest/v1/leads',{method:'POST',headers:{apikey:SB.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(o)}).then(r=>r.ok).catch(()=>false);
+const mail=(s,b)=>location.href='mailto:'+C.m+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);
+addEventListener('input',e=>{const x=e.target;if(x.id=='area'){document.querySelectorAll('.qt').forEach(q=>{const k=q.closest('tr').querySelector('.ck');if(C.D[k.dataset.c][1][k.dataset.r][1]==2)q.value=x.value});calc()}else if(x.classList.contains('qt'))calc()});
+addEventListener('change',e=>{if(e.target.classList.contains('ck'))calc()});
+addEventListener('click',e=>{if(e.target.id=='quote'){lead({name:'Kalkulátor',message:lines.join('\n')+'\nBecsült összeg: '+$('tt').textContent});mail('Árajánlat-kérés',(lines.join('\n')||'(nincs kiválasztott tétel)')+'\n\nBecsült összeg: '+$('tt').textContent)}});
+addEventListener('input',e=>{if(e.target.classList.contains('rg'))e.target.parentNode.style.setProperty('--p',e.target.value+'%')});
+addEventListener('submit',e=>{e.preventDefault();const i=e.target.id;if(i=='cf'){lead({name:$('cn').value,phone:$('cp').value,message:$('cm').value}).then(ok=>{if(ok){e.target.innerHTML='<p><b>Köszönjük! Hamarosan jelentkezünk.</b></p>'}else mail('Ajánlatkérés',$('cm').value+'\n\nNév: '+$('cn').value+'\nTelefon: '+$('cp').value)})}if(i=='nf')mail('Hírlevél-feliratkozás','Kérem a hírlevelet erre a címre: '+$('ne').value)});
+load().then(o=>{C=norm(o);render()});
+</script>
+</body>
+</html>

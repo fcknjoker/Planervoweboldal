@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>PLANERVO admin</title>
+<style>
+:root{--bg:#161513;--pn:#201e1b;--ln:#3a362f;--fg:#f1ebe0;--mu:#a39b8b;--gd:#c99d58;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}a{color:var(--gd)}
+button,input,select,textarea{font:inherit;color:inherit;background:#12110f;border:1px solid var(--ln);border-radius:8px;padding:8px}
+textarea,input:not([type]),input[type=text],input[type=email],input[type=password]{width:100%}textarea{resize:vertical}
+button{cursor:pointer;background:var(--pn)}button.p{background:var(--gd);color:#161513;border:0;font-weight:600}button.d{color:#f08c8c}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--gd)}input[type=color]{padding:2px;width:60px;height:38px}
+#L{display:none;max-width:340px;margin:12vh auto;padding:20px;gap:10px}
+#A{display:none;min-height:100vh;grid-template-columns:210px 1fr}
+nav{background:var(--pn);border-right:1px solid var(--ln);padding:14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+nav button{text-align:left;border:0;background:none}nav button.on{background:#12110f;color:var(--gd)}
+main{padding:0 20px 60px;max-width:900px;width:100%}.top{display:flex;gap:10px;align-items:center;position:sticky;top:0;background:var(--bg);padding:12px 0;z-index:3}.top span{flex:1;color:var(--mu)}
+.box{background:var(--pn);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;gap:8px}
+.r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.r>input:not([type]){flex:1;min-width:150px}.r>input[type=number]{width:105px;flex:none}
+label{display:grid;gap:4px}small{color:var(--mu)}.th{width:96px;height:64px;border:1px dashed var(--ln);border-radius:8px;background:#12110f center/cover}
+details{border:1px solid var(--ln);border-radius:12px;margin-bottom:10px;background:var(--pn)}summary{padding:12px;cursor:pointer;font-weight:600}details>div{padding:0 12px 12px;display:grid;gap:8px}
+@media(max-width:700px){#A{grid-template-columns:1fr}nav{height:auto;flex-direction:row;overflow-x:auto;position:static}}
+</style></head><body>
+<form id="L"><h2>PLANERVO admin</h2><input type="email" id="le" placeholder="E-mail" autocomplete="username" required><input type="password" id="lp" placeholder="Jelszó" autocomplete="current-password" required><button class="p">Belépés</button><small id="lm"></small></form>
+<div id="A"><nav id="N"></nav><main><div class="top"><span id="st"></span><a href="index.html" target="_blank">Oldal megnyitása</a><button class="p" id="bs">Mentés</button><button id="lo">Kilépés</button></div><div id="P"></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>// 1) Supabase: Project Settings > API: ide másold a Project URL-t és az "anon public" kulcsot.
+//    (A kulcs nyilvános, az írást a setup.sql-ben beállított jogosultság védi.)
+window.SB={url:'https://keuuvnyoeqjxvlyswrsn.supabase.co',key:'sb_publishable_rXrA8xCCJIzAigwpoIt1Ew_LqkeYPIJ'};
+// 2) Közös segédfüggvények (nem kell módosítani)
+window.esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+window.norm=o=>{const t=o.t||{};return{t,c:{a:'#c99d58',b:'#161513',f:'Cormorant Garamond',...o.c},i:{logo:'',hero:'',...o.i},m:o.m||'',g:o.g||[],D:o.D||[],
+sv:o.sv||[0,1,2].map(i=>[t['a'+i]||'',t['b'+i]||'']).filter(x=>x[0]),
+p:o.p||[['Felmérés','Megnézzük a felületet, egyeztetjük az igényeket, és pontos árajánlatot adunk.'],['Előkészítés','Takarás, kaparás, glettelés és alapozás: a szép végeredmény alapja.'],['Kivitelezés','Kézi vagy gépi festés, nemesvakolat szórás tiszta, gyors munkával.'],['Átadás','Takarítás, közös átnézés, garancia. Addig nem vagyunk kész, amíg nem elégedett.']],
+k:{tel:'',wa:'',ms:'',...o.k},
+s:(o.s||['hero','srv','calc','gal','contact'].map(k=>({k,v:1}))).flatMap((x,i,a)=>x.k=='srv'&&!a.some(y=>y.k=='proc')?[x,{k:'proc',v:1}]:[x])}};
+</script>
+<script>
+const $=id=>document.getElementById(id),sb=supabase.createClient(SB.url,SB.key),U=['db','m','m²'];
+const TABS={s:'Szekciók',t:'Szövegek',D:'Árlista',g:'Galéria',c:'Arculat',p:'Munkafolyamat',l:'Üzenetek',x:'Beállítások'},FONTS=['Cormorant Garamond','Playfair Display','Montserrat','Lora'];
+const SN={hero:'Nyitókép és főcím',srv:'Szolgáltatások',proc:'Munkafolyamat',calc:'Árlista és kalkulátor',gal:'Galéria',contact:'Kapcsolat és hírlevél',txt:'Egyedi szövegblokk'};
+let C,tab='s',dirty=false,O=new Set();
+const get=p=>p.split('.').reduce((o,x)=>o[x],C);
+const mark=v=>{dirty=v;$('st').textContent=v?'Nem mentett módosítások':'Mentve ✓'};
+const set=(p,v)=>{const a=p.split('.'),k=a.pop();a.reduce((o,x)=>o[x],C)[k]=v;mark(1)};
+const tpl=p=>p=='s'?{k:'txt',v:1,h:'Új szakasz',p:'',img:''}:p=='sv'?['Új szolgáltatás','']:p=='p'?['Új lépés','']:p=='g'?['','']:p=='D'?['Új kategória',[['Új tétel',2,0,0]]]:['Új tétel',2,0,0];
+const inp=(p,ph='',n)=>`<input data-p="${p}" value="${esc(get(p))}" placeholder="${ph}"${n?' type="number" min="0" data-n':''}>`;
+const ta=(p,r=3)=>`<textarea rows="${r}" data-p="${p}">${esc(get(p))}</textarea>`;
+const ctl=(p,i,del=1)=>`<button data-mv="${p}:${i}:-1" title="Fel">↑</button><button data-mv="${p}:${i}:1" title="Le">↓</button>${del?`<button class="d" data-del="${p}:${i}" title="Törlés">✕</button>`:''}`;
+const img=(p,k='up')=>{const v=get(p);return`<div class="r"><div class="th" style="${v?`background-image:url('${esc(v)}')`:''}"></div><input type="file" accept="image/*" data-up="${p}">${v?`<button class="d" data-rm="${p}">Törlés</button>`:''}</div>`};
+const P={
+s:()=>C.s.map((s,i)=>`<div class="box"><div class="r"><input type="checkbox" data-p="s.${i}.v" title="Látható"${s.v?' checked':''}><b style="flex:1">${SN[s.k]}${s.k=='txt'?': '+esc(s.h):''}</b>${ctl('s',i,s.k=='txt')}</div>${s.k=='txt'?inp(`s.${i}.h`,'Cím')+ta(`s.${i}.p`,4)+img(`s.${i}.img`):''}</div>`).join('')+'<button class="p" data-add="s">+ Új szövegblokk</button><p><small>A pipával ki-be kapcsolhatod a szekciót, a nyilakkal az oldalon belüli sorrendet változtathatod.</small></p>',
+t:()=>[['h','Főcím'],['p','Bevezető szöveg',3],['sh','Szolgáltatások címe'],['ph','Árlista címe'],['pp','Árlista leírása',3],['gh','Galéria címe'],['kh','Kapcsolat címe'],['kp','Elérhetőségek (soronként)',4],['nh','Hírlevél címe'],['np','Hírlevél leírása',3]].map(([k,l,r])=>`<label>${l}${r?ta('t.'+k,r):inp('t.'+k)}</label>`).join('')+'<h3>Szolgáltatások</h3>'+C.sv.map((c,i)=>`<div class="box"><div class="r">${inp(`sv.${i}.0`,'Név')}${ctl('sv',i)}</div>${ta(`sv.${i}.1`)}</div>`).join('')+'<button data-add="sv">+ Új szolgáltatás</button>',
+D:()=>C.D.map((c,ci)=>`<details data-o="${ci}"${O.has(ci)?' open':''}><summary>${esc(c[0])} (${c[1].length})</summary><div><div class="r">${inp(`D.${ci}.0`,'Kategória neve')}${ctl('D',ci)}</div><small>Tétel · egység · munkadíj (Ft) · anyagdíj (Ft). Ha mindkettő 0, az oldalon „ajánlat” jelenik meg.</small>`+c[1].map((it,ri)=>`<div class="r">${inp(`D.${ci}.1.${ri}.0`,'Tétel')}<select data-p="D.${ci}.1.${ri}.1" data-n>${[2,1,0].map(u=>`<option value="${u}"${u==it[1]?' selected':''}>${U[u]}`).join('')}</select>${inp(`D.${ci}.1.${ri}.2`,'Munkadíj',1)}${inp(`D.${ci}.1.${ri}.3`,'Anyagdíj',1)}${ctl(`D.${ci}.1`,ri)}</div>`).join('')+`<button data-add="D.${ci}.1">+ Új tétel</button></div></details>`).join('')+'<button class="p" data-add="D">+ Új kategória</button>',
+g:()=>'<div class="box"><label>Több kép egyszerre (sorban kitölti az üres helyeket)<input type="file" multiple accept="image/*" data-bulk></label></div>'+C.g.map((p,i)=>`<div class="box"><div class="r">${[0,1].map(j=>`<div><small>${j?'Utána':'Előtte'}</small>${img(`g.${i}.${j}`)}</div>`).join('')}<span style="flex:1"></span>${ctl('g',i)}</div></div>`).join('')+'<button class="p" data-add="g">+ Új képpár</button>',
+c:()=>`<div class="box"><div class="r"><label>Kiemelő szín<input type="color" data-p="c.a" value="${C.c.a}"></label><label>Háttérszín<input type="color" data-p="c.b" value="${C.c.b}"></label><label>Címsor betűtípusa<select data-p="c.f">${FONTS.map(x=>`<option${x==C.c.f?' selected':''}>${x}`).join('')}</select></label></div></div><div class="box"><b>Logó</b>${img('i.logo')}</div><div class="box"><b>Nyitókép</b>${img('i.hero')}</div>`,
+p:()=>C.p.map((c,i)=>`<div class="box"><div class="r">${inp(`p.${i}.0`,'Lépés neve')}${ctl('p',i)}</div>${ta(`p.${i}.1`)}</div>`).join('')+'<button class="p" data-add="p">+ Új lépés</button>',
+l:()=>'<div id="lb">Betöltés…</div>',
+x:()=>`<div class="box"><b>Gyors elérhetőségek az oldalon</b><label>Telefonszám (pl. +36204194746)${inp('k.tel')}</label><label>WhatsApp-szám (pl. 36204194746)${inp('k.wa')}</label><label>Messenger link (pl. https://m.me/oldalneved)${inp('k.ms')}</label></div><div class="box"><label>Ajánlatkérések e-mail-címe (vesszővel több is megadható)${inp('m')}</label></div><div class="box"><b>Jelszó módosítása</b><div class="r"><input type="password" id="np" placeholder="Új jelszó (min. 8 karakter)" autocomplete="new-password"><button id="pw">Módosítás</button></div></div><div class="box"><button id="dl">Biztonsági mentés letöltése (config.json)</button></div>`};
+function draw(){const y=scrollY;$('N').innerHTML=Object.entries(TABS).map(([k,v])=>`<button data-tab="${k}" class="${k==tab?'on':''}">${v}</button>`).join('');$('P').innerHTML='<h2>'+TABS[tab]+'</h2>'+P[tab]();scrollTo(0,y);if(tab=='l')leads()}
+async function leads(){const{data,error}=await sb.from('leads').select('*').order('created_at',{ascending:false});$('lb').innerHTML=error?'Hiba: '+esc(error.message):data.length?data.map(r=>`<div class="box"><b>${esc(r.name)}</b> <small>${new Date(r.created_at).toLocaleString('hu-HU')}</small><br>${r.phone?`<a href="tel:${esc(r.phone)}">${esc(r.phone)}</a><br>`:''}<span style="white-space:pre-line">${esc(r.message)}</span><br><button class="d" data-ld="${r.id}">Törlés</button></div>`).join(''):'Még nincs üzenet.'}
+const ch=p=>{if(p=='D')O.clear();mark(1);draw()};
+async function up(file,logo){const im=await createImageBitmap(file),k=Math.min(1,(logo?600:1600)/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+const ty=logo?'image/png':'image/jpeg',b=await new Promise(r=>c.toBlob(r,ty,.85)),n=Date.now()+'-'+Math.random().toString(36).slice(2,7)+(logo?'.png':'.jpg'),{error}=await sb.storage.from('images').upload(n,b,{contentType:ty});if(error)throw error;return sb.storage.from('images').getPublicUrl(n).data.publicUrl}
+addEventListener('input',e=>{const x=e.target,p=x.dataset.p;if(p)set(p,x.type=='checkbox'?+x.checked:x.dataset.n!=null?+x.value||0:x.value)});
+addEventListener('toggle',e=>{const o=e.target.dataset.o;if(o!=null)e.target.open?O.add(+o):O.delete(+o)},true);
+addEventListener('click',async e=>{const x=e.target.closest('button');if(!x)return;const d=x.dataset;
+if(d.tab){tab=d.tab;draw()}
+if(d.mv){const[p,i,k]=d.mv.split(':'),a=get(p),j=+i+ +k;if(j>=0&&j<a.length){[a[i],a[j]]=[a[j],a[i]];ch(p)}}
+if(d.del&&confirm('Biztosan törlöd?')){const[p,i]=d.del.split(':');get(p).splice(i,1);ch(p)}
+if(d.add){get(d.add).push(tpl(d.add));ch(d.add)}
+if(d.ld&&confirm('Törlöd az üzenetet?')){await sb.from('leads').delete().eq('id',d.ld);leads()}
+if(d.rm){set(d.rm,'');draw()}
+if(x.id=='pw'){const{error}=await sb.auth.updateUser({password:$('np').value});alert(error?error.message:'A jelszó megváltozott.')}
+if(x.id=='dl'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(C)],{type:'application/json'}));a.download='config.json';a.click()}});
+addEventListener('change',async e=>{const x=e.target,d=x.dataset;if(!x.files||!x.files.length)return;
+try{$('st').textContent='Feltöltés…';if(d.up)set(d.up,await up(x.files[0],d.up=='i.logo'));
+if(d.bulk!=null){for(const f of x.files){const u=await up(f);let s=C.g.flatMap((p,i)=>[[i,0],[i,1]]).find(([i,j])=>!C.g[i][j]);if(!s){C.g.push(['','']);s=[C.g.length-1,0]}C.g[s[0]][s[1]]=u}mark(1)}draw()}catch(er){mark(dirty);alert('Feltöltési hiba: '+er.message)}});
+async function boot(){if(SB.url.includes('PROJEKT')){$('L').style.display='grid';$('lm').textContent='Előbb add meg a Supabase adatokat a common.js fájlban.';return}
+const{data:{session}}=await sb.auth.getSession();$('A').style.display=session?'grid':'none';$('L').style.display=session?'none':'grid';if(!session)return;
+const{data,error}=await sb.from('site_config').select('data').eq('id',1).single();if(error)return alert('Betöltési hiba: '+error.message);C=norm(data.data||{});mark(0);draw()}
+$('L').onsubmit=async e=>{e.preventDefault();const{error}=await sb.auth.signInWithPassword({email:$('le').value,password:$('lp').value});if(error)$('lm').textContent='Hibás e-mail-cím vagy jelszó.';else boot()};
+$('bs').onclick=async()=>{const{error}=await sb.from('site_config').upsert({id:1,data:C,updated_at:new Date().toISOString()});if(error)alert('Mentési hiba: '+error.message);else mark(0)};
+$('lo').onclick=()=>sb.auth.signOut().then(boot);
+onbeforeunload=e=>dirty?e.preventDefault():0;
+boot();
+</script></body></html>
